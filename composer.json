@@ -1,0 +1,30 @@
+{
+    "name": "virtualclick/vc-auth",
+    "description": "Pacote de comunicação com servidor de autênticação",
+    "keywords": ["laravel"],
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sergio Hess",
+            "email": "hess.sergio@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "php": ">=5.6",
+        "illuminate/support": "5.4.x|5.5.x|5.6.x|5.7.x|5.8.x|6.x|7.x|8.x"
+    },
+    "autoload": {
+        "psr-4": {
+            "VirtualClickAuth\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "VirtualClickAuth\\ServiceProvider"
+            ]
+        }
+    }
+}
