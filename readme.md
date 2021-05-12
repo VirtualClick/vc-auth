@@ -24,7 +24,7 @@ composer require virtualclick/vc-auth
 ````
 protected $routeMiddleware = [
     ...
-    'vcauth' => \VCAuth\HandleVcAuth::class,
+    'vcauth' => \VirtualClickAuth\HandleVcAuth::class,
 ];
 ````
 
@@ -32,7 +32,7 @@ protected $routeMiddleware = [
 
 Utilize o comando abaixo para publicar o aruqivo de configuração `config/vcauth.php`:
 ````
-php artisan vendor:publish --provider="VCAuth\ServiceProvider"
+php artisan vendor:publish --provider="VirtualClickAuth\ServiceProvider"
 ````
 
 ### ENV
