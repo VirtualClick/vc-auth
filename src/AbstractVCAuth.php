@@ -33,7 +33,7 @@ abstract class AbstractVCAuth implements VCAuthInterface
         if (empty($this->token)) {
             $authIp = $this->request->server('REMOTE_ADDR');
             if (config('vcauth.vcAuthUseForwardedFor')) {
-                $this->request->server('HTTP_X_FORWARDED_FOR');
+                $authIp = $this->request->server('HTTP_X_FORWARDED_FOR');
             }
 
             if ($this->comparaIp($authIp)) {
