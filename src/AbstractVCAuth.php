@@ -2,10 +2,8 @@
 
 namespace VirtualClickAuth;
 
-use Exception;
 use Firebase\JWT\JWT;
 use Illuminate\Support\Facades\Session;
-
 
 abstract class AbstractVCAuth implements VCAuthInterface
 {
@@ -13,7 +11,6 @@ abstract class AbstractVCAuth implements VCAuthInterface
     protected $request;
 
     protected $token;
-
 
     public function __construct($request)
     {
@@ -33,12 +30,13 @@ abstract class AbstractVCAuth implements VCAuthInterface
     protected function validaViaServicoDeAutenticacao()
     {
 
-        if( empty($this->token) ) {
+        if (empty($this->token)) {
+            $authIp = $this->request->server('REMOTE_ADDR');
+            if (config('vcauth.vcAuthUseForwardedFor')) {
+                $this->request->server('HTTP_X_FORWARDED_FOR');
+            }
 
-            $authIp = (config('vcauth.vcAuthUseForwardedFor')) ? $this->request->server('HTTP_X_FORWARDED_FOR') : $this->request->server('REMOTE_ADDR');
-
-            if( in_array($authIp, config('vcauth.ipsLiberados')) ) {
-
+            if ($this->comparaIp($authIp)) {
                 return (object)[
                     'autorizado' => true,
                     'usuario' => null,
@@ -74,8 +72,7 @@ abstract class AbstractVCAuth implements VCAuthInterface
 
         curl_close($curl);
 
-        if( $statusCode != 200 ) {
-
+        if ($statusCode != 200) {
             return (object)[
                 'autorizado' => false,
                 'usuario' => null,
@@ -86,4 +83,30 @@ abstract class AbstractVCAuth implements VCAuthInterface
 
         return $retorno->data;
     }
+
+    protected function comparaIp($authIp)
+    {
+
+        $ipsLiberados = config('vcauth.ipsLiberados');
+
+        if (in_array($authIp, $ipsLiberados)) {
+            return true;
+        }
+
+        $authIExplode = explode('.', $authIp);
+        $authIArray = [
+            $authIExplode[0] . '.*.*.*',
+            $authIExplode[0] . '.' . $authIExplode[1] . '.*.*',
+            $authIExplode[0] . '.' . $authIExplode[1] . '.' . $authIExplode[2] . '.*',
+        ];
+
+        $diferencaArray = array_diff($authIArray, $ipsLiberados);
+
+        if ($diferencaArray != $authIArray) {
+            return true;
+        }
+
+        return false;
+    }
+
 }
