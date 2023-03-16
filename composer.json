@@ -13,7 +13,7 @@
     "minimum-stability": "stable",
     "require": {
         "php": ">=5.6",
-        "illuminate/support": "5.4.x|5.5.x|5.6.x|5.7.x|5.8.x|6.x|7.x|8.x"
+        "illuminate/support": "5.4.x|5.5.x|5.6.x|5.7.x|5.8.x|6.x|7.x|8.x|9.x|10.x"
     },
     "autoload": {
         "psr-4": {
